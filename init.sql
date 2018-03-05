@@ -31,7 +31,7 @@ CREATE TABLE `loan` (
   `loan_status` smallint(5) unsigned NOT NULL DEFAULT '100' COMMENT '机构操作：100 初始化审核中 200募集中 300 结束 400 已删除',
   `is_display` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否前台显示 1位显示 0 不显示',
   `location_size` int(10) unsigned DEFAULT '0' COMMENT '置顶功能,值越大，显示越靠前',
-  `product_direction` varchar(128) NOT NULL COMMENT '产品方向（投资方向）',
+  `product_direction` varchar(128) NOT NULL COMMENT '产品方向（投资方向）产品方向：1.工商企业；2.金融市场；3.基础设施；4.房地产；5.资金池；6.其他；',
   `safeguard_way` varchar(512) DEFAULT NULL COMMENT '保障方式',
   `begin_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '起投金额',
   `earning_desc` varchar(1024) DEFAULT NULL COMMENT '收益描述',
@@ -58,7 +58,7 @@ CREATE TABLE `loan` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`loan_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 CREATE TABLE `loan_finance` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -69,7 +69,7 @@ CREATE TABLE `loan_finance` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `loanid_financeuserid_UNIQUE` (`loan_id`,`finance_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品理财师关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='产品理财师关系表';
 
 CREATE TABLE `loan_investor_finance` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -170,7 +170,7 @@ CREATE TABLE `sys_user` (
   `update_by` varchar(40) COLLATE utf8_bin DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `sys_user_auth` (
   `auth_id` varchar(40) COLLATE utf8_bin NOT NULL,
@@ -219,7 +219,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `nick_name_UNIQUE` (`nick_name`),
   UNIQUE KEY `mobile_UNIQUE` (`mobile`),
   UNIQUE KEY `realname_idcard_UNIQUE` (`real_name`,`id_card`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 CREATE TABLE `user_auth_record` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -259,8 +259,7 @@ CREATE TABLE `user_demand` (
   `serial_number` bigint(20) unsigned NOT NULL COMMENT '需求编号',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index2` (`money_situation`,`earning_type`,`expected_deadline`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户需求表';
 
 CREATE TABLE `user_demand_solution` (
@@ -347,18 +346,14 @@ CREATE TABLE `user_solution` (
   `read_count` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '方案已读数',
   `adopt_count` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '方案采纳数',
   `serial_number` bigint(20) unsigned NOT NULL COMMENT '方案编号',
-  PRIMARY KEY (`id`),
-  KEY `index2` (`money_situation`,`earning_type`,`expected_deadline`,`risk_assessment_level`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户方案表';
 
 CREATE TABLE `user_surver` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT '用户id',
-  `exam_id` bigint(20) unsigned NOT NULL COMMENT '考试id',
   `answers` varchar(2048) NOT NULL COMMENT '答案记录',
-  `exam_result` varchar(32) NOT NULL COMMENT '考试结果',
   `risk_assessment_level` smallint(5) unsigned NOT NULL COMMENT '风险测评等级',
-  `score` smallint(5) unsigned NOT NULL COMMENT '得分',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户风险评测表';
