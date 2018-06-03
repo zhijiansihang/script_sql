@@ -1,3 +1,18 @@
+CREATE TABLE `app_version` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_name` varchar(255) NOT NULL COMMENT 'app名称',
+  `platform` varchar(255) NOT NULL COMMENT '系统平台,ios,android',
+  `version_code` int(11) NOT NULL COMMENT '版本编码，整数',
+  `version_name` varchar(255) NOT NULL COMMENT '版本号，如1.0.1',
+  `min_version_code` int(11) DEFAULT NULL COMMENT '最低兼容版本编码，整数',
+  `update_title` varchar(255) DEFAULT NULL COMMENT '更新提示标题',
+  `update_content` varchar(255) DEFAULT NULL COMMENT '更新提示内容',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `update_status` varchar(255) DEFAULT NULL COMMENT '更新状态，1可用，-1不可用，提审状态',
+  `update_url` varchar(255) DEFAULT NULL COMMENT '更新包下载地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `cms` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `type_code` smallint(5) unsigned NOT NULL COMMENT 'cms 描述:type_code:type_name = [banner:100:banner,[notice:200:公告,[information:300:资讯,[avatar:400:头像,[exam:500:考题\n',
@@ -16,7 +31,7 @@ CREATE TABLE `cms` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `update_by` bigint(20) unsigned DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8 COMMENT='内容管理表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='内容管理表';
 
 CREATE TABLE `loan` (
   `loan_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '标id',
@@ -25,10 +40,10 @@ CREATE TABLE `loan` (
   `loan_type` tinyint(3) unsigned NOT NULL COMMENT '1:公墓，2私募',
   `product_type` smallint(5) unsigned NOT NULL COMMENT '产品类型:1.信托；2.资管；3.其他资产, 4私募',
   `amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '投资规模',
-  `interest_rate` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '公墓利率',
+  `interest_rate` decimal(10,2) DEFAULT NULL COMMENT '公墓利率',
   `is_rate_floating` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '公墓是否浮动 1位浮动 0 不浮动',
   `reserve_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '已预约金额',
-  `loan_status` smallint(5) unsigned NOT NULL DEFAULT '100' COMMENT '机构操作：100 初始化审核中 200募集中 300 结束 400 已删除',
+  `loan_status` smallint(5) unsigned NOT NULL DEFAULT '100' COMMENT '机构操作：100 初始化审核中150 待发布 200募集中 300 结束 400 已删除',
   `is_display` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否前台显示 1位显示 0 不显示',
   `location_size` int(10) unsigned DEFAULT '0' COMMENT '置顶功能,值越大，显示越靠前',
   `product_direction` varchar(128) NOT NULL COMMENT '产品方向（投资方向）产品方向：1.工商企业；2.金融市场；3.基础设施；4.房地产；5.资金池；6.其他；',
@@ -38,7 +53,7 @@ CREATE TABLE `loan` (
   `issuer` varchar(128) DEFAULT NULL COMMENT '发行机构',
   `fund_type` smallint(5) unsigned DEFAULT NULL COMMENT '基金类型:1.本土；2.合资；3.外资；4.其他；',
   `servicing_way` smallint(5) unsigned DEFAULT NULL COMMENT '付息方式:1.按月付息；2.按季付息；3.半年付息；4.按年付息；5.到期付息；6.其他',
-  `adaptation_deadline` smallint(5) unsigned DEFAULT NULL COMMENT '续存期限（年）',
+  `adaptation_deadline` varchar(128) DEFAULT NULL COMMENT '续存期限（年）',
   `investment_deadline` smallint(5) unsigned DEFAULT NULL COMMENT '投资期限（月）',
   `distribution_region` varchar(128) DEFAULT NULL COMMENT '发行地区',
   `ratio_type` smallint(5) unsigned DEFAULT NULL COMMENT '大小配比:1.小额畅打；2.已配出小额；3.严格配比；4.全大额',
@@ -57,8 +72,9 @@ CREATE TABLE `loan` (
   `review_desc` varchar(128) DEFAULT NULL COMMENT '审核描述',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `release_time` datetime DEFAULT NULL,
   PRIMARY KEY (`loan_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=10005 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 CREATE TABLE `loan_finance` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -69,7 +85,7 @@ CREATE TABLE `loan_finance` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `loanid_financeuserid_UNIQUE` (`loan_id`,`finance_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='产品理财师关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='产品理财师关系表';
 
 CREATE TABLE `loan_investor_finance` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -143,7 +159,7 @@ CREATE TABLE `sys_role` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_bqy406dtsr7j7d6fawi1ckyn1` (`name`),
   UNIQUE KEY `UK_jqdita2l45v2gglry7bp8kl1f` (`role_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `sys_role_resource` (
   `resourceid` varchar(40) COLLATE utf8_bin NOT NULL,
@@ -170,7 +186,7 @@ CREATE TABLE `sys_user` (
   `update_by` varchar(40) COLLATE utf8_bin DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `sys_user_auth` (
   `auth_id` varchar(40) COLLATE utf8_bin NOT NULL,
@@ -219,7 +235,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `nick_name_UNIQUE` (`nick_name`),
   UNIQUE KEY `mobile_UNIQUE` (`mobile`),
   UNIQUE KEY `realname_idcard_UNIQUE` (`real_name`,`id_card`)
-) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=10005 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 CREATE TABLE `user_auth_record` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -260,7 +276,7 @@ CREATE TABLE `user_demand` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户需求表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户需求表';
 
 CREATE TABLE `user_demand_solution` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '需求方案匹配id',
@@ -319,8 +335,17 @@ CREATE TABLE `user_institution_detail` (
   `is_deleted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 1:为删除 0:未删除',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`user_id`)
+  UNIQUE KEY `unique_userid` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='机构详情';
+
+CREATE TABLE `user_realname_auth_record` (
+  `id` varchar(64) NOT NULL COMMENT 'id',
+  `real_name` varchar(64) NOT NULL COMMENT '姓名',
+  `id_card` varchar(64) NOT NULL COMMENT '身份证',
+  `response_message` varchar(1024) DEFAULT NULL COMMENT '返回报文',
+  `flag` smallint(5) unsigned DEFAULT '0' COMMENT '0为初始化,1为正确,2错误',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户实名认证记录表';
 
 CREATE TABLE `user_service_record` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -352,8 +377,8 @@ CREATE TABLE `user_solution` (
 CREATE TABLE `user_surver` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT '用户id',
-  `answers` varchar(2048) NOT NULL COMMENT '答案记录',
+  `answers` text NOT NULL COMMENT '答案记录',
   `risk_assessment_level` smallint(5) unsigned NOT NULL COMMENT '风险测评等级',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户风险评测表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户风险评测表';
